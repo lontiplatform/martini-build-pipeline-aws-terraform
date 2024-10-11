@@ -3,28 +3,13 @@ variable "region" {
   type        = string
 }
 
-variable "bucket_name" {
-  description = "S3 bucket name for storing artifacts"
-  type        = string
-}
-
-variable "project_name" {
-  description = "CodeBuild project name"
-  type        = string
-}
-
-variable "role_name" {
-  description = "IAM role name for CodeBuild"
+variable "environment" {
+  description = "Environment name (e.g., 'dev', 'prod')"
   type        = string
 }
 
 variable "pipeline_name" {
   description = "CodePipeline project name"
-  type        = string
-}
-
-variable "pipeline_role_name" {
-  description = "IAM role name for CodePipeline"
   type        = string
 }
 
@@ -48,6 +33,16 @@ variable "tags" {
   type        = map(string)
 }
 
+variable "log_retention_days" {
+  description = "Retention period for CloudWatch logs (in days)"
+  type        = number
+}
+
+variable "parameter_name" {
+  description = "The name of the SSM Parameter that needs to be retrieved"
+  type        = string
+}
+
 variable "buildspec_file" {
   description = "Buildspec file for CodeBuild (e.g., 'martini-build-image.yaml' or 'martini-upload-package.yaml')"
   type        = string
@@ -57,3 +52,4 @@ variable "buildspec_file" {
     error_message = "buildspec_file must be either 'martini-build-image.yaml' or 'martini-upload-package.yaml'."
   }
 }
+

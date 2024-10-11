@@ -1,5 +1,6 @@
-resource "aws_iam_role" "codebuild_service_role" {
-  name = local.role_name_codebuild
+# CodeBuild Service Role and Policy
+resource "aws_iam_role" "codebuild_role" {
+  name = "${var.environment}-${var.pipeline_name}-codebuild-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -14,12 +15,12 @@ resource "aws_iam_role" "codebuild_service_role" {
     ]
   })
 
-  tags = var.tags  # Applying dynamic tags
+  tags = var.tags
 }
 
 resource "aws_iam_role_policy" "codebuild_policy" {
   name   = "CodeBuildPolicy"
-  role   = aws_iam_role.codebuild_service_role.id
+  role   = aws_iam_role.codebuild_role.id
 
   policy = jsonencode({
     Version = "2012-10-17",
@@ -31,7 +32,7 @@ resource "aws_iam_role_policy" "codebuild_policy" {
           "logs:CreateLogStream",
           "logs:PutLogEvents"
         ],
-        Resource = "*"
+        Resource = "arn:aws:logs:${var.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${var.environment}-${var.pipeline_name}-codebuild*"
       },
       {
         Effect   = "Allow",
@@ -39,14 +40,17 @@ resource "aws_iam_role_policy" "codebuild_policy" {
           "s3:GetObject",
           "s3:PutObject"
         ],
-        Resource = "*"
+        Resource = [
+          "${aws_s3_bucket.codebuild_artifacts.arn}",
+          "${aws_s3_bucket.codebuild_artifacts.arn}/*"
+        ]
       },
       {
         Effect   = "Allow",
         Action   = [
           "codepipeline:StartPipelineExecution"
         ],
-        Resource = "*"
+        Resource = aws_codepipeline.codepipeline_name.arn
       },
       {
         Effect   = "Allow",
@@ -55,7 +59,7 @@ resource "aws_iam_role_policy" "codebuild_policy" {
           "ssm:GetParameters",
           "ssm:GetParametersByPath"
         ],
-        Resource = "*"
+        Resource = "arn:aws:ssm:${var.region}:${data.aws_caller_identity.current.account_id}:parameter/${var.parameter_name}"
       },
       {
         Effect   = "Allow",
@@ -63,14 +67,24 @@ resource "aws_iam_role_policy" "codebuild_policy" {
           "ecr:BatchGetImage",
           "ecr:GetDownloadUrlForLayer"
         ],
-        Resource = "*"
+        Resource = "arn:aws:ecr:${var.region}:${data.aws_caller_identity.current.account_id}:repository/${var.environment}-${var.pipeline_name}-codebuild*"
+      },
+      {
+        Effect   = "Allow",
+        Action   = [
+          "codestar-connections:GetConnectionToken",
+          "codestar-connections:GetConnection",
+          "codestar-connections:UseConnection"
+        ],
+        Resource = var.connection_arn
       }
     ]
   })
 }
 
-resource "aws_iam_role" "codepipeline_service_role" {
-  name = local.role_name_codepipeline
+# CodePipeline Service Role and Policy
+resource "aws_iam_role" "codepipeline_role" {
+  name = "${var.environment}-${var.pipeline_name}-codepipeline-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -85,12 +99,12 @@ resource "aws_iam_role" "codepipeline_service_role" {
     ]
   })
 
-  tags = var.tags  # Applying dynamic tags
+  tags = var.tags
 }
 
 resource "aws_iam_role_policy" "codepipeline_policy" {
   name   = "CodePipelinePolicy"
-  role   = aws_iam_role.codepipeline_service_role.id
+  role   = aws_iam_role.codepipeline_role.id
 
   policy = jsonencode({
     Version = "2012-10-17",
@@ -101,7 +115,7 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
           "codebuild:StartBuild",
           "codebuild:BatchGetBuilds"
         ],
-        Resource = "*"
+        Resource = aws_codebuild_project.codebuild_name.arn
       },
       {
         Effect   = "Allow",
@@ -109,18 +123,28 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
           "s3:GetObject",
           "s3:PutObject"
         ],
-        Resource = "*"
+        Resource = [
+          "${aws_s3_bucket.codebuild_artifacts.arn}",
+          "${aws_s3_bucket.codebuild_artifacts.arn}/*"
+        ]
       },
       {
         Effect   = "Allow",
         Action   = [
-          "codepipeline:*"
+          "codepipeline:StartPipelineExecution",
+          "codepipeline:GetPipelineState",
+          "codepipeline:GetPipelineExecution",
+          "codepipeline:GetPipeline",
+          "codepipeline:ListPipelineExecutions",
+          "codepipeline:RetryStageExecution"
         ],
-        Resource = "*"
+        Resource = aws_codepipeline.codepipeline_name.arn
       },
       {
         Effect   = "Allow",
         Action   = [
+          "codestar-connections:GetConnectionToken",
+          "codestar-connections:GetConnection",
           "codestar-connections:UseConnection"
         ],
         Resource = var.connection_arn
@@ -129,10 +153,10 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
   })
 }
 
-# KMS Permissions for CodePipeline to interact with KMS-encrypted resources
+# KMS Permissions for CodePipeline
 resource "aws_iam_role_policy" "codepipeline_kms_policy" {
   name   = "CodePipelineKMSPolicy"
-  role   = aws_iam_role.codepipeline_service_role.id
+  role   = aws_iam_role.codepipeline_role.id
 
   policy = jsonencode({
     Version = "2012-10-17",
@@ -145,7 +169,7 @@ resource "aws_iam_role_policy" "codepipeline_kms_policy" {
           "kms:GenerateDataKey",
           "kms:DescribeKey"
         ],
-        Resource = "*"  # Replace with specific KMS key ARN if needed
+        Resource = "arn:aws:kms:${var.region}:${data.aws_caller_identity.current.account_id}:alias/aws/s3"
       }
     ]
   })
