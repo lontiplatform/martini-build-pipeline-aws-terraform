@@ -39,7 +39,7 @@ variable "log_retention_days" {
 }
 
 variable "parameter_name" {
-  description = "The name of the SSM Parameter that needs to be retrieved"
+  description = "The name of the SSM Parameter that stores configuration values or secrets needed for the pipeline (e.g., BASE_URL, ECR_REPO_NAME, MARTINI_VERSION)"
   type        = string
 }
 

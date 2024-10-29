@@ -27,6 +27,24 @@ resource "aws_iam_role_policy" "codebuild_policy" {
     Statement = [
       {
         Effect   = "Allow",
+        Action   = "ecr:GetAuthorizationToken",
+        Resource = "*"
+      },
+      {
+        Effect   = "Allow",
+        Action   = [
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:BatchGetImage",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:InitiateLayerUpload",
+          "ecr:UploadLayerPart",
+          "ecr:CompleteLayerUpload",
+          "ecr:PutImage"
+        ],
+        Resource = "arn:aws:ecr:${var.region}:${data.aws_caller_identity.current.account_id}:repository/${var.environment}-${var.pipeline_name}-martini-repo"
+      },
+      {
+        Effect   = "Allow",
         Action   = [
           "logs:CreateLogGroup",
           "logs:CreateLogStream",
@@ -40,10 +58,7 @@ resource "aws_iam_role_policy" "codebuild_policy" {
           "s3:GetObject",
           "s3:PutObject"
         ],
-        Resource = [
-          "${aws_s3_bucket.codebuild_artifacts.arn}",
-          "${aws_s3_bucket.codebuild_artifacts.arn}/*"
-        ]
+        Resource = "${aws_s3_bucket.codebuild_artifacts.arn}/*"  
       },
       {
         Effect   = "Allow",
@@ -60,14 +75,6 @@ resource "aws_iam_role_policy" "codebuild_policy" {
           "ssm:GetParametersByPath"
         ],
         Resource = "arn:aws:ssm:${var.region}:${data.aws_caller_identity.current.account_id}:parameter/${var.parameter_name}"
-      },
-      {
-        Effect   = "Allow",
-        Action   = [
-          "ecr:BatchGetImage",
-          "ecr:GetDownloadUrlForLayer"
-        ],
-        Resource = "arn:aws:ecr:${var.region}:${data.aws_caller_identity.current.account_id}:repository/${var.environment}-${var.pipeline_name}-codebuild*"
       },
       {
         Effect   = "Allow",
@@ -123,10 +130,7 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
           "s3:GetObject",
           "s3:PutObject"
         ],
-        Resource = [
-          "${aws_s3_bucket.codebuild_artifacts.arn}",
-          "${aws_s3_bucket.codebuild_artifacts.arn}/*"
-        ]
+        Resource = "${aws_s3_bucket.codebuild_artifacts.arn}/*"  
       },
       {
         Effect   = "Allow",
