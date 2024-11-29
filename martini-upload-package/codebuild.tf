@@ -1,5 +1,5 @@
 resource "aws_codebuild_project" "codebuild_name" {
-  name        = "${var.environment}-${var.pipeline_name}-codebuild"  
+  name        = "${var.environment}-${var.pipeline_name}-codebuild"
   description = "CodeBuild project for Martini"
 
   environment {
@@ -8,12 +8,19 @@ resource "aws_codebuild_project" "codebuild_name" {
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
     privileged_mode             = false
+
+    environment_variable {
+      name  = "PARAMETER_NAME"
+      value = aws_ssm_parameter.martini_build_images.name
+      type  = "PLAINTEXT"
+    }
+
   }
 
   source {
-    type        = "GITHUB"
-    location    = "https://github.com/${var.repository_name}"
-    buildspec   = var.buildspec_file
+    type            = "GITHUB"
+    location        = "https://github.com/${var.repository_name}"
+    buildspec       = var.buildspec_file
     git_clone_depth = 1
   }
 

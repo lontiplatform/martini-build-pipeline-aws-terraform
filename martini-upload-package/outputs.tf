@@ -17,3 +17,8 @@ output "codebuild_role_arn" {
 output "codepipeline_role_arn" {
   value = aws_iam_role.codepipeline_role.arn
 }
+
+output "ssm_martini_build_images_name" {
+  value       = aws_ssm_parameter.martini_build_images.name
+  description = "The name of the SSM parameter for Martini build images"
+}

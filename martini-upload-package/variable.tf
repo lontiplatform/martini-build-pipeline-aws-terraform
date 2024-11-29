@@ -1,8 +1,3 @@
-variable "region" {
-  description = "AWS region for deployment"
-  type        = string
-}
-
 variable "environment" {
   description = "Environment name (e.g., 'dev', 'prod')"
   type        = string
@@ -38,18 +33,32 @@ variable "log_retention_days" {
   type        = number
 }
 
-variable "parameter_name" {
-  description = "The name of the SSM Parameter that stores configuration values or secrets needed for the pipeline (e.g., BASE_URL, ECR_REPO_NAME, MARTINI_VERSION)"
-  type        = string
-}
-
 variable "buildspec_file" {
   description = "Buildspec file for CodeBuild (e.g., 'martini-build-image.yaml' or 'martini-upload-package.yaml')"
   type        = string
-
-  validation {
-    condition     = contains(["martini-build-image.yaml", "martini-upload-package.yaml"], var.buildspec_file)
-    error_message = "buildspec_file must be either 'martini-build-image.yaml' or 'martini-upload-package.yaml'."
-  }
 }
 
+variable "aws_region" {
+  description = "AWS region for deployment"
+  type        = string
+}
+
+variable "parameter_name" {
+  description = "Name of the SSM Parameter to store configuration values"
+  type        = string
+}
+
+variable "base_url" {
+  description = "The URL of the remote Martini runtime server."
+  type        = string
+}
+
+variable "martini_user_name" {
+  description = "The username used to generate the OAuth token from the remote Martini runtime server."
+  type        = string
+}
+
+variable "martini_user_password" {
+  description = "The password used to generate the OAuth token from the remote Martini runtime server."
+  type        = string
+}

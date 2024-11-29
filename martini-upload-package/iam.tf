@@ -25,48 +25,7 @@ resource "aws_iam_role_policy" "codebuild_policy" {
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
-      {
-        Effect   = "Allow",
-        Action   = "ecr:GetAuthorizationToken",
-        Resource = "*"
-      },
-      {
-        Effect   = "Allow",
-        Action   = [
-          "ecr:BatchCheckLayerAvailability",
-          "ecr:BatchGetImage",
-          "ecr:GetDownloadUrlForLayer",
-          "ecr:InitiateLayerUpload",
-          "ecr:UploadLayerPart",
-          "ecr:CompleteLayerUpload",
-          "ecr:PutImage"
-        ],
-        Resource = "arn:aws:ecr:${var.region}:${data.aws_caller_identity.current.account_id}:repository/${var.environment}-${var.pipeline_name}-martini-repo"
-      },
-      {
-        Effect   = "Allow",
-        Action   = [
-          "logs:CreateLogGroup",
-          "logs:CreateLogStream",
-          "logs:PutLogEvents"
-        ],
-        Resource = "arn:aws:logs:${var.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${var.environment}-${var.pipeline_name}-codebuild*"
-      },
-      {
-        Effect   = "Allow",
-        Action   = [
-          "s3:GetObject",
-          "s3:PutObject"
-        ],
-        Resource = "${aws_s3_bucket.codebuild_artifacts.arn}/*"  
-      },
-      {
-        Effect   = "Allow",
-        Action   = [
-          "codepipeline:StartPipelineExecution"
-        ],
-        Resource = aws_codepipeline.codepipeline_name.arn
-      },
+      # SSM Parameter permissions
       {
         Effect   = "Allow",
         Action   = [
@@ -74,8 +33,36 @@ resource "aws_iam_role_policy" "codebuild_policy" {
           "ssm:GetParameters",
           "ssm:GetParametersByPath"
         ],
-        Resource = "arn:aws:ssm:${var.region}:${data.aws_caller_identity.current.account_id}:parameter/${var.parameter_name}"
+        Resource = "arn:aws:ssm:${var.aws_region}:${data.aws_caller_identity.current.account_id}:parameter/${var.parameter_name}"
       },
+       # CloudWatch Logs Permissions
+      {
+        Effect   = "Allow",
+        Action   = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ],
+        Resource = "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${var.environment}-${var.pipeline_name}-codebuild*"
+      },
+      # S3 Artifact Permissions
+      {
+        Effect   = "Allow",
+        Action   = [
+          "s3:GetObject",
+          "s3:PutObject"
+        ],
+        Resource = "${aws_s3_bucket.codebuild_artifacts.arn}/*"
+      },
+      # CodePipeline Trigger Permissions
+      {
+        Effect   = "Allow",
+        Action   = [
+          "codepipeline:StartPipelineExecution"
+        ],
+        Resource = aws_codepipeline.codepipeline_name.arn
+      },
+      # CodeStar Connection Permissions
       {
         Effect   = "Allow",
         Action   = [
@@ -116,6 +103,7 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
+      # Permissions to start and manage CodeBuild
       {
         Effect   = "Allow",
         Action   = [
@@ -124,14 +112,16 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
         ],
         Resource = aws_codebuild_project.codebuild_name.arn
       },
+      # Permissions to interact with S3 for artifacts
       {
         Effect   = "Allow",
         Action   = [
           "s3:GetObject",
           "s3:PutObject"
         ],
-        Resource = "${aws_s3_bucket.codebuild_artifacts.arn}/*"  
+        Resource = "${aws_s3_bucket.codebuild_artifacts.arn}/*"
       },
+      # CodePipeline Permissions
       {
         Effect   = "Allow",
         Action   = [
@@ -144,6 +134,7 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
         ],
         Resource = aws_codepipeline.codepipeline_name.arn
       },
+      # CodeStar Connection Permissions
       {
         Effect   = "Allow",
         Action   = [
@@ -173,7 +164,7 @@ resource "aws_iam_role_policy" "codepipeline_kms_policy" {
           "kms:GenerateDataKey",
           "kms:DescribeKey"
         ],
-        Resource = "arn:aws:kms:${var.region}:${data.aws_caller_identity.current.account_id}:alias/aws/s3"
+        Resource = "arn:aws:kms:${var.aws_region}:${data.aws_caller_identity.current.account_id}:alias/aws/s3"
       }
     ]
   })
