@@ -4,7 +4,7 @@ resource "aws_ecr_repository" "martini_repository" {
   image_scanning_configuration {
     scan_on_push = true
   }
-  
-  tags = var.tags
+
+  tags         = var.tags
   force_delete = true
 }

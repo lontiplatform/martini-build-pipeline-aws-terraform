@@ -6,7 +6,7 @@ resource "aws_iam_role" "codebuild_role" {
     Version = "2012-10-17",
     Statement = [
       {
-        Effect    = "Allow",
+        Effect = "Allow",
         Principal = {
           Service = "codebuild.amazonaws.com"
         },
@@ -19,16 +19,16 @@ resource "aws_iam_role" "codebuild_role" {
 }
 
 resource "aws_iam_role_policy" "codebuild_policy" {
-  name   = "CodeBuildPolicy"
-  role   = aws_iam_role.codebuild_role.id
+  name = "CodeBuildPolicy"
+  role = aws_iam_role.codebuild_role.id
 
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
       # SSM Parameter permissions
       {
-        Effect   = "Allow",
-        Action   = [
+        Effect = "Allow",
+        Action = [
           "ssm:GetParameter",
           "ssm:GetParameters",
           "ssm:GetParametersByPath"
@@ -37,8 +37,8 @@ resource "aws_iam_role_policy" "codebuild_policy" {
       },
       # CloudWatch Logs Permissions
       {
-        Effect   = "Allow",
-        Action   = [
+        Effect = "Allow",
+        Action = [
           "logs:CreateLogGroup",
           "logs:CreateLogStream",
           "logs:PutLogEvents"
@@ -47,8 +47,8 @@ resource "aws_iam_role_policy" "codebuild_policy" {
       },
       # S3 Artifact Permissions
       {
-        Effect   = "Allow",
-        Action   = [
+        Effect = "Allow",
+        Action = [
           "s3:GetObject",
           "s3:PutObject"
         ],
@@ -56,16 +56,16 @@ resource "aws_iam_role_policy" "codebuild_policy" {
       },
       # CodePipeline Trigger Permissions
       {
-        Effect   = "Allow",
-        Action   = [
+        Effect = "Allow",
+        Action = [
           "codepipeline:StartPipelineExecution"
         ],
         Resource = aws_codepipeline.martini_pipeline.arn
       },
       # CodeStar Connection Permissions
       {
-        Effect   = "Allow",
-        Action   = [
+        Effect = "Allow",
+        Action = [
           "codestar-connections:GetConnectionToken",
           "codestar-connections:GetConnection",
           "codestar-connections:UseConnection"
@@ -84,7 +84,7 @@ resource "aws_iam_role" "codepipeline_role" {
     Version = "2012-10-17",
     Statement = [
       {
-        Effect    = "Allow",
+        Effect = "Allow",
         Principal = {
           Service = "codepipeline.amazonaws.com"
         },
@@ -97,16 +97,16 @@ resource "aws_iam_role" "codepipeline_role" {
 }
 
 resource "aws_iam_role_policy" "codepipeline_policy" {
-  name   = "CodePipelinePolicy"
-  role   = aws_iam_role.codepipeline_role.id
+  name = "CodePipelinePolicy"
+  role = aws_iam_role.codepipeline_role.id
 
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
       # Permissions to start and manage CodeBuild
       {
-        Effect   = "Allow",
-        Action   = [
+        Effect = "Allow",
+        Action = [
           "codebuild:StartBuild",
           "codebuild:BatchGetBuilds"
         ],
@@ -114,8 +114,8 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
       },
       # Permissions to interact with S3 for artifacts
       {
-        Effect   = "Allow",
-        Action   = [
+        Effect = "Allow",
+        Action = [
           "s3:GetObject",
           "s3:PutObject"
         ],
@@ -123,8 +123,8 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
       },
       # CodePipeline Permissions
       {
-        Effect   = "Allow",
-        Action   = [
+        Effect = "Allow",
+        Action = [
           "codepipeline:StartPipelineExecution",
           "codepipeline:GetPipelineState",
           "codepipeline:GetPipelineExecution",
@@ -136,8 +136,8 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
       },
       # CodeStar Connection Permissions
       {
-        Effect   = "Allow",
-        Action   = [
+        Effect = "Allow",
+        Action = [
           "codestar-connections:GetConnectionToken",
           "codestar-connections:GetConnection",
           "codestar-connections:UseConnection"
@@ -150,8 +150,8 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
 
 # KMS Permissions for CodePipeline
 resource "aws_iam_role_policy" "codepipeline_kms_policy" {
-  name   = "CodePipelineKMSPolicy"
-  role   = aws_iam_role.codepipeline_role.id
+  name = "CodePipelineKMSPolicy"
+  role = aws_iam_role.codepipeline_role.id
 
   policy = jsonencode({
     Version = "2012-10-17",

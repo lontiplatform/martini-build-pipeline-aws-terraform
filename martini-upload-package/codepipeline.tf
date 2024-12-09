@@ -11,15 +11,15 @@ resource "aws_codepipeline" "martini_pipeline" {
     name = "Source"
 
     action {
-      name             = "SourceAction"
-      category         = "Source"
-      owner            = "AWS"
-      provider         = "CodeStarSourceConnection"
-      version          = "1"
+      name     = "SourceAction"
+      category = "Source"
+      owner    = "AWS"
+      provider = "CodeStarSourceConnection"
+      version  = "1"
       configuration = {
-        ConnectionArn     = var.connection_arn
-        FullRepositoryId  = var.repository_name
-        BranchName        = var.branch_name
+        ConnectionArn    = var.connection_arn
+        FullRepositoryId = var.repository_name
+        BranchName       = var.branch_name
       }
       output_artifacts = ["source_output"]
     }
