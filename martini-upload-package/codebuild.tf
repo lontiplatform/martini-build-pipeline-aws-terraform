@@ -27,7 +27,6 @@ resource "aws_codebuild_project" "martini_project" {
   logs_config {
     cloudwatch_logs {
       group_name  = aws_cloudwatch_log_group.martini_project_log_group.name
-      stream_name = aws_cloudwatch_log_stream.martini_project_log_stream.name
     }
   }
 

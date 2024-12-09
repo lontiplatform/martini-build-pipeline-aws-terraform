@@ -4,12 +4,6 @@ resource "aws_cloudwatch_log_group" "martini_project_log_group" {
   tags              = var.tags
 }
 
-resource "aws_cloudwatch_log_stream" "martini_project_log_stream" {
-  name           = "${var.environment}-${var.pipeline_name}-codebuild-log"
-  log_group_name = aws_cloudwatch_log_group.martini_project_log_group.name
-}
-
-
 resource "aws_cloudwatch_log_group" "codepipeline_log_group" {
   name              = "/aws/codepipeline/${var.environment}-${var.pipeline_name}-codepipeline"
   retention_in_days = var.log_retention_days  

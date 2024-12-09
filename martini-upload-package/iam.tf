@@ -43,10 +43,7 @@ resource "aws_iam_role_policy" "codebuild_policy" {
           "logs:CreateLogStream",
           "logs:PutLogEvents"
         ],
-        Resource = [
-          aws_cloudwatch_log_group.martini_project_log_group.arn,
-          "${aws_cloudwatch_log_group.martini_project_log_group.arn}:*"
-        ]
+        Resource = "${aws_cloudwatch_log_group.martini_project_log_group.arn}:*"
       },
       # S3 Artifact Permissions
       {

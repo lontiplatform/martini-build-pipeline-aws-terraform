@@ -27,13 +27,3 @@ output "ssm_martini_upload_package_name" {
   value       = aws_ssm_parameter.martini_upload_package.name
   description = "The name of the SSM parameter for Martini build images"
 }
-
-output "cloudwatch_log_group_name" {
-  value       = aws_cloudwatch_log_group.martini_project_log_group.name
-  description = "The name of the CloudWatch Log Group"
-}
-
-output "cloudwatch_log_stream_name" {
-  value       = aws_cloudwatch_log_stream.martini_project_log_stream.name
-  description = "The name of the CloudWatch Log Stream"
-}
