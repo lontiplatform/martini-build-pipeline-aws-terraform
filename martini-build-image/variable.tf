@@ -34,7 +34,7 @@ variable "log_retention_days" {
 }
 
 variable "buildspec_file" {
-  description = "Buildspec file for CodeBuild (e.g., 'martini-build-image.yaml' or 'martini-upload-package.yaml')"
+  description = "Buildspec file for CodeBuild ('martini-build-image.yaml')"
   type        = string
 }
 

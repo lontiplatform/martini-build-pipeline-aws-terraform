@@ -1,4 +1,4 @@
-resource "aws_ssm_parameter" "martini_build_images" {
+resource "aws_ssm_parameter" "martini_upload_package" {
     name        = var.parameter_name
     type        = "SecureString"
     value       = jsonencode({

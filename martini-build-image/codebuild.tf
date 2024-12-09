@@ -1,4 +1,4 @@
-resource "aws_codebuild_project" "codebuild_name" {
+resource "aws_codebuild_project" "martini_project" {
   name        = "${var.environment}-${var.pipeline_name}-codebuild"
   description = "CodeBuild project for Martini"
 
@@ -11,7 +11,7 @@ resource "aws_codebuild_project" "codebuild_name" {
 
     environment_variable {
       name  = "PARAMETER_NAME"
-      value = aws_ssm_parameter.martini_build_images.name
+      value = aws_ssm_parameter.martini_build_image.name
       type  = "PLAINTEXT"
     }
 
@@ -33,8 +33,8 @@ resource "aws_codebuild_project" "codebuild_name" {
 
   logs_config {
     cloudwatch_logs {
-      group_name  = aws_cloudwatch_log_group.codebuild_log_group.name
-      stream_name = "${var.environment}-${var.pipeline_name}-codebuild-log"
+      group_name  = aws_cloudwatch_log_group.martini_project_log_group.name
+      stream_name = aws_cloudwatch_log_stream.martini_project_log_stream.name
     }
   }
 

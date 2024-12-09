@@ -1,4 +1,4 @@
-resource "aws_codepipeline" "codepipeline_name" {
+resource "aws_codepipeline" "martini_pipeline" {
   name     = "${var.environment}-${var.pipeline_name}-codepipeline"
   role_arn = aws_iam_role.codepipeline_role.arn
 
@@ -37,7 +37,7 @@ resource "aws_codepipeline" "codepipeline_name" {
       input_artifacts  = ["source_output"]
       output_artifacts = ["build_output"]
       configuration = {
-        ProjectName = aws_codebuild_project.codebuild_name.name
+        ProjectName = aws_codebuild_project.martini_project.name
       }
     }
   }

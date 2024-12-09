@@ -33,9 +33,9 @@ resource "aws_iam_role_policy" "codebuild_policy" {
           "ssm:GetParameters",
           "ssm:GetParametersByPath"
         ],
-        Resource = "arn:aws:ssm:${var.aws_region}:${data.aws_caller_identity.current.account_id}:parameter/${var.parameter_name}"
+        Resource = aws_ssm_parameter.martini_upload_package.arn
       },
-       # CloudWatch Logs Permissions
+      # CloudWatch Logs Permissions
       {
         Effect   = "Allow",
         Action   = [
@@ -43,7 +43,10 @@ resource "aws_iam_role_policy" "codebuild_policy" {
           "logs:CreateLogStream",
           "logs:PutLogEvents"
         ],
-        Resource = "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${var.environment}-${var.pipeline_name}-codebuild*"
+        Resource = [
+          aws_cloudwatch_log_group.martini_project_log_group.arn,
+          "${aws_cloudwatch_log_group.martini_project_log_group.arn}:*"
+        ]
       },
       # S3 Artifact Permissions
       {
@@ -60,7 +63,7 @@ resource "aws_iam_role_policy" "codebuild_policy" {
         Action   = [
           "codepipeline:StartPipelineExecution"
         ],
-        Resource = aws_codepipeline.codepipeline_name.arn
+        Resource = aws_codepipeline.martini_pipeline.arn
       },
       # CodeStar Connection Permissions
       {
@@ -110,7 +113,7 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
           "codebuild:StartBuild",
           "codebuild:BatchGetBuilds"
         ],
-        Resource = aws_codebuild_project.codebuild_name.arn
+        Resource = aws_codebuild_project.martini_project.arn
       },
       # Permissions to interact with S3 for artifacts
       {
@@ -132,7 +135,7 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
           "codepipeline:ListPipelineExecutions",
           "codepipeline:RetryStageExecution"
         ],
-        Resource = aws_codepipeline.codepipeline_name.arn
+        Resource = aws_codepipeline.martini_pipeline.arn
       },
       # CodeStar Connection Permissions
       {
