@@ -8,13 +8,6 @@ resource "aws_codebuild_project" "martini_project" {
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
     privileged_mode             = false
-
-    environment_variable {
-      name  = "PARAMETER_NAME"
-      value = aws_ssm_parameter.martini_build_image.name
-      type  = "PLAINTEXT"
-    }
-
   }
 
   source {
