@@ -53,22 +53,8 @@ variable "base_url" {
   type        = string
 }
 
-variable "martini_user_name" {
-  description = "The username used to generate the OAuth token from the remote Martini runtime server."
+variable "martini_access_token" {
+  description = "Long-lived OAuth token used to authenticate with the remote Martini runtime server."
   type        = string
 }
 
-variable "martini_user_password" {
-  description = "The password used to generate the OAuth token from the remote Martini runtime server."
-  type        = string
-}
-
-variable "client_id" {
-  description = "OAuth client ID for authentication. Default is TOROMartini."
-  type        = string
-}
-
-variable "client_secret" {
-  description = "OAuth client secret for authentication."
-  type        = string
-}

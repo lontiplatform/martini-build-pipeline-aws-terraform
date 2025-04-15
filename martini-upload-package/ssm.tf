@@ -3,10 +3,7 @@ resource "aws_ssm_parameter" "martini_upload_package" {
   type = "SecureString"
   value = jsonencode({
     BASE_URL              = var.base_url
-    MARTINI_USER_NAME     = var.martini_user_name
-    MARTINI_USER_PASSWORD = var.martini_user_password
-    CLIENT_ID             = var.client_id
-    client_secret         = var.client_secret
+    MARTINI_ACCESS_TOKEN  = var.martini_access_token
   })
   description = "SSM parameter for Martini build image configurations"
   tags = {
