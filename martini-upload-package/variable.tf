@@ -58,3 +58,8 @@ variable "martini_access_token" {
   type        = string
 }
 
+variable "allowed_packages" {
+  description = "Single or Comma-separated list of allowed packages"
+  type        = string
+}
+

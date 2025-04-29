@@ -1,4 +1,3 @@
-
 # Martini Package Upload with AWS CodePipeline
 
 This Terraform module configures an AWS CodePipeline for uploading Martini packages to a specified Martini instance. The pipeline ensures controlled and automated deployments by integrating package management and secure configuration handling into a streamlined CI/CD workflow.
@@ -47,6 +46,7 @@ Update the `variables.tf` file or pass values via `terraform.tfvars` to customiz
 - **`aws_region`**: AWS region for deployment.
 - **`aws_account_id`**: AWS Account ID.
 - **`parameter_name`**: Name of the SSM Parameter to store configuration values.
+- **`allowed_packages`**: Single or comma-separated list of allowed packages.
 - **`connection_arn`**: CodeStar connection ARN for GitHub.
 
 **Note**: CodeStar Connections - The connection must be created manually in the AWS Management Console due to the required authentication flow with the external platform. Once created, it generates a Connection ARN that can be referenced in automation tools like Terraform.
@@ -73,7 +73,5 @@ Run the following Terraform commands:
 ## Additional Notes
 
 - **Debugging**: Use CloudWatch logs to troubleshoot build and pipeline errors.
-- **SSM Parameters**: Securely store sensitive values, such as Martini user credentials, using AWS Systems Manager Parameter Store. Make sure to set the actual `parameter_name` in the buildspec file before running a build.
+- **SSM Parameters**: Securely store sensitive values, such as Martini user credentials and allowed packages, using AWS Systems Manager Parameter Store. Make sure to set the actual `parameter_name` in the buildspec file before running a build.
 - **Retention Policies**: Log groups created in CloudWatch have a customizable retention period defined in `variable.tf`.
-
-
