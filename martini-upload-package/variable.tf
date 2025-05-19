@@ -58,8 +58,39 @@ variable "martini_access_token" {
   type        = string
 }
 
-variable "allowed_packages" {
-  description = "Single or Comma-separated list of allowed packages"
+variable "package_name_pattern" {
   type        = string
+  default     = ".*"
+  description = "Regex pattern to match packages to be uploaded"
+}
+
+variable "package_dir" {
+  type        = string
+  default     = "packages"
+  description = "Directory containing the packages to be uploaded"
+}
+
+variable "async_upload" {
+  type        = string
+  default     = "false"
+  description = "Set to true to treat HTTP 504 as successful upload"
+}
+
+variable "success_check_timeout" {
+  type        = number
+  default     = 6
+  description = "Polling attempts for package status check"
+}
+
+variable "success_check_delay" {
+  type        = number
+  default     = 30
+  description = "Delay between polling attempts (seconds)"
+}
+
+variable "success_check_package_name" {
+  type        = string
+  default     = ""
+  description = "Specific package name to poll for success status"
 }
 
