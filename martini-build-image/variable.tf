@@ -1,6 +1,7 @@
 variable "environment" {
   description = "Environment name (e.g., 'dev', 'prod')"
   type        = string
+  default     = "dev"
 }
 
 variable "pipeline_name" {
@@ -34,7 +35,7 @@ variable "log_retention_days" {
 }
 
 variable "buildspec_file" {
-  description = "Buildspec file for CodeBuild ('martini-build-image.yaml')"
+  description = "Buildspec file for CodeBuild (e.g., 'martini-build-image.yaml')"
   type        = string
 }
 
@@ -61,4 +62,5 @@ variable "ecr_repo_name" {
 variable "parameter_name" {
   description = "Name of the SSM Parameter to store configuration values"
   type        = string
+  default     = "martini-build-image"
 }

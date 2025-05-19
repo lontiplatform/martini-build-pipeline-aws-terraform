@@ -1,12 +1,8 @@
 resource "aws_ssm_parameter" "martini_upload_package" {
-  name = var.parameter_name
-  type = "SecureString"
+  name  = var.parameter_name  # fallback is set in variables.tf
+  type  = "SecureString"
+
   value = jsonencode({
-<<<<<<< HEAD
-    BASE_URL              = var.base_url
-    MARTINI_ACCESS_TOKEN  = var.martini_access_token
-    ALLOWED_PACKAGES      = var.allowed_packages
-=======
     BASE_URL                   = var.base_url
     MARTINI_ACCESS_TOKEN       = var.martini_access_token
     PACKAGE_NAME_PATTERN       = var.package_name_pattern
@@ -15,12 +11,15 @@ resource "aws_ssm_parameter" "martini_upload_package" {
     SUCCESS_CHECK_TIMEOUT      = var.success_check_timeout
     SUCCESS_CHECK_DELAY        = var.success_check_delay
     SUCCESS_CHECK_PACKAGE_NAME = var.success_check_package_name
->>>>>>> 29393d4 (Applied changes from martini upload pipeline update)
   })
-  description = "SSM parameter for Martini build image configurations"
 
-  tags = {
-    Environment = var.environment
-    Project     = "Martini"
-  }
+  description = "SSM parameter for Martini upload-package configurations"
+
+  tags = merge(
+    {
+      Environment = var.environment
+      Project     = "Martini"
+    },
+    var.tags
+  )
 }

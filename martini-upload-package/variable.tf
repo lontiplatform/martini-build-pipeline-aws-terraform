@@ -1,6 +1,7 @@
 variable "environment" {
   description = "Environment name (e.g., 'dev', 'prod')"
   type        = string
+  default     = "dev"
 }
 
 variable "pipeline_name" {
@@ -34,7 +35,7 @@ variable "log_retention_days" {
 }
 
 variable "buildspec_file" {
-  description = "Buildspec file for CodeBuild ('martini-upload-package.yaml')"
+  description = "Buildspec file for CodeBuild (e.g., 'martini-upload-package.yaml')"
   type        = string
 }
 
@@ -46,6 +47,7 @@ variable "aws_region" {
 variable "parameter_name" {
   description = "Name of the SSM Parameter to store configuration values"
   type        = string
+  default     = "martini-upload-package"
 }
 
 variable "base_url" {
@@ -59,38 +61,37 @@ variable "martini_access_token" {
 }
 
 variable "package_name_pattern" {
+  description = "Regex pattern to match packages to be uploaded"
   type        = string
   default     = ".*"
-  description = "Regex pattern to match packages to be uploaded"
 }
 
 variable "package_dir" {
+  description = "Directory containing the packages to be uploaded"
   type        = string
   default     = "packages"
-  description = "Directory containing the packages to be uploaded"
 }
 
 variable "async_upload" {
+  description = "Set to true to treat HTTP 504 as successful upload"
   type        = string
   default     = "false"
-  description = "Set to true to treat HTTP 504 as successful upload"
 }
 
 variable "success_check_timeout" {
+  description = "Polling attempts for package status check"
   type        = number
   default     = 6
-  description = "Polling attempts for package status check"
 }
 
 variable "success_check_delay" {
+  description = "Delay between polling attempts (seconds)"
   type        = number
   default     = 30
-  description = "Delay between polling attempts (seconds)"
 }
 
 variable "success_check_package_name" {
+  description = "Specific package name to poll for success status"
   type        = string
   default     = ""
-  description = "Specific package name to poll for success status"
 }
-
