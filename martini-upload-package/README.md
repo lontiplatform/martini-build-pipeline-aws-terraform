@@ -1,77 +1,78 @@
+
 # Martini Package Upload with AWS CodePipeline
 
 This Terraform module configures an AWS CodePipeline for uploading Martini packages to a specified Martini instance. The pipeline ensures controlled and automated deployments by integrating package management and secure configuration handling into a streamlined CI/CD workflow.
 
 ## Overview
 
-This Terraform template automates the process of zipping and uploading Martini packages to a Martini instance.
+This module automates the process of zipping and uploading Martini packages to a Martini instance using AWS CodeBuild and CodePipeline. It supports dynamic filtering, asynchronous polling, and runtime parameter injection from SSM Parameter Store.
 
 ## Repository Structure
 
-The repository includes the following Terraform files:
+The module directory includes the following Terraform configuration files:
 
 - `cloudwatch.tf`: Sets up CloudWatch log groups for build and pipeline monitoring.
-- `codebuild.tf`: Configures CodeBuild to execute the upload process.
-- `codepipeline.tf`: Defines CodePipeline for managing CI/CD stages, linked to GitHub.
+- `codebuild.tf`: Configures CodeBuild to execute the upload process using a buildspec.
+- `codepipeline.tf`: Defines CodePipeline for managing CI/CD stages, linked to GitHub via CodeStar Connection.
 - `iam.tf`: Manages IAM roles and policies for CodeBuild, CodePipeline, and other AWS services.
 - `main.tf`: Sets the AWS provider and dynamic naming conventions.
 - `outputs.tf`: Exports key resource ARNs (e.g., CodeBuild project, CodePipeline).
 - `s3.tf`: Configures an S3 bucket for temporary artifact storage.
-- `ssm.tf`: Defines parameters for secure storage of sensitive configuration values in AWS Systems Manager Parameter Store.
-- `variables.tf`: Declares variables with validations and detailed descriptions.
+- `ssm.tf`: Defines a SecureString parameter to store Martini upload configuration in AWS Systems Manager Parameter Store.
+- `variables.tf`: Declares required and optional variables with validations and default fallbacks.
 
 ## Usage
 
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/torocloud/martini-aws-codepipeline-terraform-module.git
-cd martini-aws-codepipeline-terraform-module/martini-upload-package
+git clone https://github.com/lontiplatform/martini-build-pipeline-aws-terraform.git
+cd martini-build-pipeline-aws-terraform/martini-upload-package
 ```
 
-### Configure Variable Inputs
+### Configure Inputs
 
-Update the `variables.tf` file or pass values via `terraform.tfvars` to customize the following:
+Update the `terraform.tfvars` file or override variables via CLI to configure:
 
-- **`environment`**: Environment name (e.g., 'dev', 'prod').
-- **`pipeline_name`**: CodePipeline project name.
-- **`repository_name`**: Full GitHub repository name (e.g., 'username/repo').
-- **`branch_name`**: Branch name for CodePipeline.
-- **`tags`**: Tags to apply to resources.
-- **`log_retention_days`**: Retention period for CloudWatch logs (in days).
-- **`buildspec_file`**: Buildspec file for CodeBuild ('martini-upload-package.yaml').
-- **`base_url`**: Base URL of the Martini instance.
-- **`martini_user_name`**: Username for authentication with the Martini instance.
-- **`martini_user_password`**: Password for authentication with the Martini instance.
-- **`aws_region`**: AWS region for deployment.
-- **`aws_account_id`**: AWS Account ID.
-- **`parameter_name`**: Name of the SSM Parameter to store configuration values.
-- **`allowed_packages`**: Single or comma-separated list of allowed packages.
-- **`connection_arn`**: CodeStar connection ARN for GitHub.
-
-**Note**: CodeStar Connections - The connection must be created manually in the AWS Management Console due to the required authentication flow with the external platform. Once created, it generates a Connection ARN that can be referenced in automation tools like Terraform.
+- `environment`: Deployment environment name (e.g., `dev`, `prod`).
+- `pipeline_name`: CodePipeline project name.
+- `repository_name`: GitHub repository (e.g., `lontiplatform/martini-build-pipeline-aws`).
+- `branch_name`: Git branch name to trigger builds.
+- `connection_arn`: CodeStar Connection ARN (manually generated in AWS console).
+- `parameter_name`: Name of the SSM parameter holding runtime config.
+- `buildspec_file`: Path to the buildspec file used in CodeBuild (e.g., `martini-upload-package.yaml`).
+- `aws_region`: AWS region for deployment.
+- `aws_account_id`: Your AWS Account ID.
+- `tags`: Common tags to assign to all resources.
+- `log_retention_days`: CloudWatch log retention in days.
+- `base_url`: Base URL of the Martini instance.
+- `martini_access_token`: Authentication token for the target Martini runtime.
+- `package_name_pattern`: Regex pattern to match package directories to upload.
+- `package_dir`: Directory where packages are located (default: `packages`).
+- `async_upload`: Whether to support HTTP 504 async responses.
+- `success_check_timeout`: Polling retry limit for status check.
+- `success_check_delay`: Delay between polling attempts.
+- `success_check_package_name`: Optional: Poll only this package name.
 
 ### Deploy the Module
 
-Run the following Terraform commands:
-
-1. Initialize the Terraform configuration:
-   ```bash
-   terraform init
-   ```
-
-2. Preview the resources to be created:
-   ```bash
-   terraform plan
-   ```
-
-3. Apply the configuration to deploy resources:
-   ```bash
-   terraform apply
-   ```
+```bash
+terraform init
+terraform plan
+terraform apply
+```
 
 ## Additional Notes
 
-- **Debugging**: Use CloudWatch logs to troubleshoot build and pipeline errors.
-- **SSM Parameters**: Securely store sensitive values, such as Martini user credentials and allowed packages, using AWS Systems Manager Parameter Store. Make sure to set the actual `parameter_name` in the buildspec file before running a build.
-- **Retention Policies**: Log groups created in CloudWatch have a customizable retention period defined in `variable.tf`.
+- **Parameter Management**: The `ssm.tf` file defines a secure parameter in SSM. This parameter feeds dynamic runtime values into CodeBuild jobs.
+- **Buildspec and Script**: This module expects the `martini-upload-package.yaml` buildspec and `upload_packages.sh` script to exist in the GitHub source.
+- **Security**: All secrets are stored in AWS Systems Manager Parameter Store as SecureStrings.
+- **Logs**: Check CloudWatch for build/pipeline logs. Retention period is configurable.
+- **Triggers**: Automatically runs on commits to the specified branch.
+
+## References
+
+- [Martini CI/CD Documentation](https://developer.lonti.com/docs/martini/cicd/automated-deployment/aws-codepipeline)
+- [Terraform SSM Parameter Store Docs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssm_parameter)
+- [AWS CodePipeline Docs](https://docs.aws.amazon.com/codepipeline)
+- [Martini Build Pipeline Repository](https://github.com/lontiplatform/martini-build-pipeline-aws)
