@@ -57,23 +57,23 @@ terraform apply
 
 ## Inputs Reference
 
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| <a name="input_async_upload"></a> [async\_upload](#input\_async\_upload) | Set to true to treat HTTP 504 as successful upload | `bool` | `"false"` | no |
-| <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | AWS region for deployment | `string` | n/a | yes |
-| <a name="input_base_url"></a> [base\_url](#input\_base\_url) | The URL of the remote Martini runtime server. | `string` | n/a | yes |
-| <a name="input_branch_name"></a> [branch\_name](#input\_branch\_name) | Branch name for CodePipeline | `string` | n/a | yes |
-| <a name="input_buildspec_file"></a> [buildspec\_file](#input\_buildspec\_file) | Buildspec file for CodeBuild (e.g., 'martini-upload-package.yaml') | `string` | n/a | yes |
-| <a name="input_connection_arn"></a> [connection\_arn](#input\_connection\_arn) | CodeStar connection ARN for GitHub | `string` | n/a | yes |
-| <a name="input_environment"></a> [environment](#input\_environment) | Environment name (e.g., 'dev', 'prod') | `string` | `"dev"` | no |
-| <a name="input_log_retention_days"></a> [log\_retention\_days](#input\_log\_retention\_days) | Retention period for CloudWatch logs (in days) | `number` | n/a | yes |
-| <a name="input_martini_access_token"></a> [martini\_access\_token](#input\_martini\_access\_token) | Long-lived OAuth token used to authenticate with the remote Martini runtime server. | `string` | n/a | yes |
-| <a name="input_package_dir"></a> [package\_dir](#input\_package\_dir) | Directory containing the packages to be uploaded | `string` | `"packages"` | no |
-| <a name="input_package_name_pattern"></a> [package\_name\_pattern](#input\_package\_name\_pattern) | Regex pattern to match packages to be uploaded | `string` | `".*"` | no |
-| <a name="input_parameter_name"></a> [parameter\_name](#input\_parameter\_name) | Name of the SSM Parameter to store configuration values | `string` | `"martini-upload-package"` | no |
-| <a name="input_pipeline_name"></a> [pipeline\_name](#input\_pipeline\_name) | CodePipeline project name | `string` | n/a | yes |
-| <a name="input_repository_name"></a> [repository\_name](#input\_repository\_name) | Full GitHub repository name (e.g., 'username/repo') | `string` | n/a | yes |
-| <a name="input_success_check_delay"></a> [success\_check\_delay](#input\_success\_check\_delay) | Delay between polling attempts (seconds) | `number` | `30` | no |
-| <a name="input_success_check_package_name"></a> [success\_check\_package\_name](#input\_success\_check\_package\_name) | Specific package name to poll for success status | `string` | `""` | no |
-| <a name="input_success_check_timeout"></a> [success\_check\_timeout](#input\_success\_check\_timeout) | Polling attempts for package status check | `number` | `6` | no |
-| <a name="input_tags"></a> [tags](#input\_tags) | Tags to apply to resources | `map(string)` | n/a | yes |
+| Name                         | Description                                                               | Type         | Default                  | Required |
+|------------------------------|---------------------------------------------------------------------------|--------------|--------------------------|:--------:|
+| async_upload                 | Set to true to treat HTTP 504 as successful upload                        | bool         | "false"                  | no       |
+| aws_region                   | AWS region for deployment                                                 | string       | n/a                      | yes      |
+| base_url                     | The URL of the remote Martini runtime server                              | string       | n/a                      | yes      |
+| branch_name                  | Branch name for CodePipeline                                              | string       | n/a                      | yes      |
+| buildspec_file               | Buildspec file for CodeBuild (e.g., 'martini-upload-package.yaml')        | string       | n/a                      | yes      |
+| connection_arn               | CodeStar connection ARN for GitHub                                        | string       | n/a                      | yes      |
+| environment                  | Environment name (e.g., 'dev', 'prod')                                    | string       | "dev"                    | no       |
+| log_retention_days           | Retention period for CloudWatch logs (in days)                            | number       | n/a                      | yes      |
+| martini_access_token         | Long-lived OAuth token used to authenticate with the remote runtime       | string       | n/a                      | yes      |
+| package_dir                  | Directory containing the packages to be uploaded                          | string       | "packages"               | no       |
+| package_name_pattern         | Regex pattern to match packages to be uploaded                            | string       | ".*"                     | no       |
+| parameter_name               | Name of the SSM Parameter to store configuration values                   | string       | "martini-upload-package" | no       |
+| pipeline_name                | CodePipeline project name                                                 | string       | n/a                      | yes      |
+| repository_name              | Full GitHub repository name (e.g., 'username/repo')                       | string       | n/a                      | yes      |
+| success_check_delay          | Delay between polling attempts (seconds)                                  | number       | 30                       | no       |
+| success_check_package_name   | Specific package name to poll for success status                          | string       | ""                       | no       |
+| success_check_timeout        | Polling attempts for package status check                                 | number       | 6                        | no       |
+| tags                         | Tags to apply to resources                                                | map(string)  | n/a                      | yes      |

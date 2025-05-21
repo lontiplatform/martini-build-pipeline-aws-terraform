@@ -67,18 +67,19 @@ Run the following Terraform commands:
 
 ## Input Reference
 
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| <a name="input_aws_account_id"></a> [aws\_account\_id](#input\_aws\_account\_id) | AWS Account ID | `string` | n/a | yes |
-| <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | AWS region for deployment | `string` | n/a | yes |
-| <a name="input_branch_name"></a> [branch\_name](#input\_branch\_name) | Branch name for CodePipeline | `string` | n/a | yes |
-| <a name="input_buildspec_file"></a> [buildspec\_file](#input\_buildspec\_file) | Buildspec file for CodeBuild (e.g., 'martini-build-image.yaml') | `string` | n/a | yes |
-| <a name="input_connection_arn"></a> [connection\_arn](#input\_connection\_arn) | CodeStar connection ARN for GitHub | `string` | n/a | yes |
-| <a name="input_ecr_repo_name"></a> [ecr\_repo\_name](#input\_ecr\_repo\_name) | ECR repository name for Martini builds | `string` | n/a | yes |
-| <a name="input_environment"></a> [environment](#input\_environment) | Environment name (e.g., 'dev', 'prod') | `string` | `"dev"` | no |
-| <a name="input_log_retention_days"></a> [log\_retention\_days](#input\_log\_retention\_days) | Retention period for CloudWatch logs (in days) | `number` | n/a | yes |
-| <a name="input_martini_version"></a> [martini\_version](#input\_martini\_version) | Version of Martini to be used in the build | `string` | n/a | yes |
-| <a name="input_parameter_name"></a> [parameter\_name](#input\_parameter\_name) | Name of the SSM Parameter to store configuration values | `string` | `"martini-build-image"` | no |
-| <a name="input_pipeline_name"></a> [pipeline\_name](#input\_pipeline\_name) | CodePipeline project name | `string` | n/a | yes |
-| <a name="input_repository_name"></a> [repository\_name](#input\_repository\_name) | Full GitHub repository name (e.g., 'username/repo') | `string` | n/a | yes |
-| <a name="input_tags"></a> [tags](#input\_tags) | Tags to apply to resources | `map(string)` | n/a | yes |
+| Name                   | Description                                                           | Type         | Default              | Required |
+|------------------------|-----------------------------------------------------------------------|--------------|----------------------|:--------:|
+| aws_account_id         | AWS Account ID                                                       | string       | n/a                  | yes      |
+| aws_region             | AWS region for deployment                                             | string       | n/a                  | yes      |
+| branch_name            | Branch name for CodePipeline                                          | string       | n/a                  | yes      |
+| buildspec_file         | Buildspec file for CodeBuild (e.g., 'martini-build-image.yaml')       | string       | n/a                  | yes      |
+| connection_arn         | CodeStar connection ARN for GitHub                                    | string       | n/a                  | yes      |
+| ecr_repo_name          | ECR repository name for Martini builds                                | string       | n/a                  | yes      |
+| environment            | Environment name (e.g., 'dev', 'prod')                                | string       | "dev"                | no       |
+| log_retention_days     | Retention period for CloudWatch logs (in days)                        | number       | n/a                  | yes      |
+| martini_version        | Version of Martini to be used in the build                            | string       | n/a                  | yes      |
+| parameter_name         | Name of the SSM Parameter to store configuration values               | string       | "martini-build-image"| no       |
+| pipeline_name          | CodePipeline project name                                             | string       | n/a                  | yes      |
+| repository_name        | Full GitHub repository name (e.g., 'username/repo')                   | string       | n/a                  | yes      |
+| tags                   | Tags to apply to resources                                            | map(string)  | n/a                  | yes      |
+
