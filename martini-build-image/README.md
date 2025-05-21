@@ -33,21 +33,7 @@ cd martini-aws-codepipeline-terraform-module/martini-build-image
 
 ### Configure Variable Inputs
 
-Update the `variables.tf` file or pass values via `terraform.tfvars` to customize the following:
-
-- **`environment`**: Environment name (e.g., 'dev', 'prod').
-- **`pipeline_name`**: CodePipeline project name.
-- **`repository_name`**: Full GitHub repository name (e.g., 'username/repo').
-- **`branch_name`**: Branch name for CodePipeline.
-- **`tags`**: Tags to apply to resources.
-- **`log_retention_days`**: Retention period for CloudWatch logs (in days).
-- **`buildspec_file`**: Buildspec file for CodeBuild ('martini-build-image.yaml').
-- **`martini_version`**: Martini runtime version to be used.
-- **`aws_region`**: AWS region for deployment.
-- **`aws_account_id`**: AWS Account ID.
-- **`ecr_repo_name`**: ECR repository name for Martini builds.
-- **`parameter_name`**: Name of the SSM Parameter to store configuration values.
-- **`connection_arn`**: CodeStar connection ARN for GitHub.
+For a complete list of inputs and their descriptions, see the [Input Reference](#input-reference)
 
 **Note**: CodeStar Connections - The connection must be created manually in the AWS Management Console due to the required authentication flow with the external platform. Once created, it generates a Connection ARN that can be referenced in automation tools like Terraform.
 
@@ -76,4 +62,20 @@ Run the following Terraform commands:
 - **SSM Parameters**: Securely store sensitive values, such as Martini user credentials, using AWS Systems Manager Parameter Store. Make sure to set the actual `parameter_name` in the buildspec file before running a build.
 - **Retention Policies**: Log groups created in CloudWatch have a customizable retention period defined in `variable.tf`.
 
+## Input Reference
 
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_aws_account_id"></a> [aws\_account\_id](#input\_aws\_account\_id) | AWS Account ID | `string` | n/a | yes |
+| <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | AWS region for deployment | `string` | n/a | yes |
+| <a name="input_branch_name"></a> [branch\_name](#input\_branch\_name) | Branch name for CodePipeline | `string` | n/a | yes |
+| <a name="input_buildspec_file"></a> [buildspec\_file](#input\_buildspec\_file) | Buildspec file for CodeBuild (e.g., 'martini-build-image.yaml') | `string` | n/a | yes |
+| <a name="input_connection_arn"></a> [connection\_arn](#input\_connection\_arn) | CodeStar connection ARN for GitHub | `string` | n/a | yes |
+| <a name="input_ecr_repo_name"></a> [ecr\_repo\_name](#input\_ecr\_repo\_name) | ECR repository name for Martini builds | `string` | n/a | yes |
+| <a name="input_environment"></a> [environment](#input\_environment) | Environment name (e.g., 'dev', 'prod') | `string` | `"dev"` | no |
+| <a name="input_log_retention_days"></a> [log\_retention\_days](#input\_log\_retention\_days) | Retention period for CloudWatch logs (in days) | `number` | n/a | yes |
+| <a name="input_martini_version"></a> [martini\_version](#input\_martini\_version) | Version of Martini to be used in the build | `string` | n/a | yes |
+| <a name="input_parameter_name"></a> [parameter\_name](#input\_parameter\_name) | Name of the SSM Parameter to store configuration values | `string` | `"martini-build-image"` | no |
+| <a name="input_pipeline_name"></a> [pipeline\_name](#input\_pipeline\_name) | CodePipeline project name | `string` | n/a | yes |
+| <a name="input_repository_name"></a> [repository\_name](#input\_repository\_name) | Full GitHub repository name (e.g., 'username/repo') | `string` | n/a | yes |
+| <a name="input_tags"></a> [tags](#input\_tags) | Tags to apply to resources | `map(string)` | n/a | yes |

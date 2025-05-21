@@ -74,7 +74,7 @@ variable "package_dir" {
 
 variable "async_upload" {
   description = "Set to true to treat HTTP 504 as successful upload"
-  type        = string
+  type        = bool
   default     = "false"
 }
 
