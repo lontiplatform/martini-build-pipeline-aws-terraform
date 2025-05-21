@@ -42,11 +42,12 @@ terraform apply
 ```
 
 ## Additional Notes
-- **Parameter Management**: The `ssm.tf` file defines a secure parameter in SSM. This parameter feeds dynamic runtime values into CodeBuild jobs.
-- **Buildspec and Script**: This module expects the `martini-upload-package.yaml` buildspec and `upload_packages.sh` script to exist in the GitHub source.
-- **Security**: All secrets are stored in AWS Systems Manager Parameter Store as SecureStrings.
-- **Logs**: Check CloudWatch for build/pipeline logs. Retention period is configurable.
-- **Triggers**: Automatically runs on commits to the specified branch.
+
+- **Buildspec and Script**: This module expects the `martini-upload-package.yaml` buildspec and `upload_packages.sh` script to exist in the source GitHub repository.
+- **Parameter Management**: The `ssm.tf` file defines a secure parameter in AWS SSM Parameter Store, which provides dynamic runtime configuration to CodeBuild jobs.
+- **Security**: Secrets like tokens and URLs are securely stored as `SecureString` values in Parameter Store.
+- **Monitoring & Debugging**: CloudWatch logs are available for both build and pipeline stages. Use them to troubleshoot issues. Log retention is configurable via `log_retention_days`.
+- **Automation**: Pipelines are automatically triggered by commits to the specified Git branch.
 
 ## References
 - [Martini CI/CD Documentation](https://developer.lonti.com/docs/martini/cicd/automated-deployment/aws-codepipeline)

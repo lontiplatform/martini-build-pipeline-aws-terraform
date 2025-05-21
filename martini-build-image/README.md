@@ -58,9 +58,12 @@ Run the following Terraform commands:
 
 ## Additional Notes
 
-- **Debugging**: Use CloudWatch logs to troubleshoot build and pipeline errors.
-- **SSM Parameters**: Securely store sensitive values, such as Martini user credentials, using AWS Systems Manager Parameter Store. Make sure to set the actual `parameter_name` in the buildspec file before running a build.
-- **Retention Policies**: Log groups created in CloudWatch have a customizable retention period defined in `variable.tf`.
+- **Buildspec and Script**: This module expects the `martini-build-image.yaml` buildspec and `Dockerfile` to exist in the source GitHub repository.
+- **Parameter Management**: The `ssm.tf` file defines a secure parameter in AWS SSM Parameter Store, which provides dynamic runtime configuration to CodeBuild jobs.
+- **Security**: All secrets are stored in AWS Systems Manager Parameter Store as `SecureString` values.
+- **Monitoring & Debugging**: Use CloudWatch logs to troubleshoot issues in the build and pipeline stages. Log retention is configurable via `log_retention_days`.
+- **Automation**: The pipeline automatically triggers on commits to the specified Git branch.
+
 
 ## Input Reference
 
