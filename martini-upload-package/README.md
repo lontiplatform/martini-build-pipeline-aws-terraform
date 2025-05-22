@@ -1,4 +1,3 @@
-
 # Martini Package Upload with AWS CodePipeline
 
 This Terraform module configures an AWS CodePipeline for uploading Martini packages to a specified Martini instance. The pipeline ensures controlled and automated deployments by integrating package management and secure configuration handling into a streamlined CI/CD workflow.
@@ -33,6 +32,8 @@ cd martini-build-pipeline-aws-terraform/martini-upload-package
 ### Configure Inputs
 
 For a complete list of inputs and their descriptions, see the [Inputs Reference](#inputs-reference)
+
+**Note**: CodeStar Connections - The connection must be created manually in the AWS Management Console due to the required authentication flow with the external platform. Once created, it generates a Connection ARN that can be referenced in automation tools like Terraform.
 
 ### Deploy the Module
 

@@ -93,3 +93,4 @@ variable "success_check_package_name" {
   type        = string
   default     = ""
 }
+
