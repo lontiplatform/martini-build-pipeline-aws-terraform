@@ -1,5 +1,5 @@
 resource "aws_codepipeline" "martini_pipeline" {
-  name     = "${var.environment}-${var.pipeline_name}-codepipeline"
+  name     = "${local.name_prefix}-codepipeline"
   role_arn = aws_iam_role.codepipeline_role.arn
 
   artifact_store {
@@ -11,17 +11,17 @@ resource "aws_codepipeline" "martini_pipeline" {
     name = "Source"
 
     action {
-      name     = "SourceAction"
-      category = "Source"
-      owner    = "AWS"
-      provider = "CodeStarSourceConnection"
-      version  = "1"
+      name             = "SourceAction"
+      category         = "Source"
+      owner            = "AWS"
+      provider         = "CodeStarSourceConnection"
+      version          = "1"
+      output_artifacts = ["source_output"]
       configuration = {
         ConnectionArn    = var.connection_arn
         FullRepositoryId = var.repository_name
         BranchName       = var.branch_name
       }
-      output_artifacts = ["source_output"]
     }
   }
 

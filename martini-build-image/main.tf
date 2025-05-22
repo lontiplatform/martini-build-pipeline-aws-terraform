@@ -9,8 +9,11 @@ terraform {
   }
 }
 
-provider "aws" {
-  region = var.aws_region
-}
+provider "aws" {}
 
+data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
+
+locals {
+  name_prefix = "${var.environment}-${var.pipeline_name}"
+}

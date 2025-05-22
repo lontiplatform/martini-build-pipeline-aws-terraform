@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "codebuild_artifacts" {
-  bucket        = "${var.environment}-${var.pipeline_name}-s3-artifacts"
+  bucket        = "${local.name_prefix}-s3-artifacts"
   force_destroy = true
   tags          = var.tags
 }

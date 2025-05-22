@@ -7,7 +7,12 @@ This repository provides Terraform modules to configure AWS CodePipelines for au
 The repository includes Terraform modules to address two primary workflows:
 
 1. **Build Docker Images**: Automates the process of creating Docker images containing the Martini Server Runtime and associated packages, and pushes them to Amazon Elastic Container Registry (ECR).
+   - Uses the `martini-build-image` module and its corresponding buildspec (`martini-build-image.yaml`)
+   - Docker image definition is handled in the `Dockerfile`.
+
 2. **Upload Martini Packages**: Facilitates zipping and uploading Martini packages to specified Martini instances.
+   - Uses the `martini-upload-package` module and the `martini-upload-package.yaml` buildspec.
+   - Execution logic handled by `upload_packages.sh`, a reusable shell script.
 
 ## Why GitHub instead of CodeCommit?
 
@@ -28,9 +33,13 @@ AWS deprecated CodeCommit in favor of broader integrations with GitHub, GitLab, 
 
 ## Project Structure
 
-The repository includes the following templates that automates the creation of the following:
-- **build-docker-images**: This Terraform template automates the process of building a Docker image containing s specific version of Martini Server Runtime and Martini Packages.
-- **upload-martini-packages**: This Terraform template automates the process of zipping and uploading Martini packages to a Martini instance.
+The repository includes the following templates:
+
+- **`martini-build-image`**: Terraform module for building Docker images for Martini.
+  - Relies on: `martini-build-image.yaml` (buildspec), `Dockerfile`
+
+- **`martini-upload-package`**: Terraform module for uploading Martini packages to an instance.
+  - Relies on: `martini-upload-package.yaml` (buildspec), `upload_packages.sh`
 
 ## References
 

@@ -1,18 +1,15 @@
-# CodeBuild Service Role and Policy
 resource "aws_iam_role" "codebuild_role" {
-  name = "${var.environment}-${var.pipeline_name}-codebuild-role"
+  name = "${local.name_prefix}-codebuild-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
-    Statement = [
-      {
-        Effect = "Allow",
-        Principal = {
-          Service = "codebuild.amazonaws.com"
-        },
-        Action = "sts:AssumeRole"
-      }
-    ]
+    Statement = [{
+      Effect = "Allow",
+      Principal = {
+        Service = "codebuild.amazonaws.com"
+      },
+      Action = "sts:AssumeRole"
+    }]
   })
 
   tags = var.tags
@@ -25,7 +22,6 @@ resource "aws_iam_role_policy" "codebuild_policy" {
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
-      # SSM Parameter permissions
       {
         Effect = "Allow",
         Action = [
@@ -35,7 +31,6 @@ resource "aws_iam_role_policy" "codebuild_policy" {
         ],
         Resource = aws_ssm_parameter.martini_upload_package.arn
       },
-      # CloudWatch Logs Permissions
       {
         Effect = "Allow",
         Action = [
@@ -45,7 +40,6 @@ resource "aws_iam_role_policy" "codebuild_policy" {
         ],
         Resource = "${aws_cloudwatch_log_group.martini_project_log_group.arn}:*"
       },
-      # S3 Artifact Permissions
       {
         Effect = "Allow",
         Action = [
@@ -54,7 +48,6 @@ resource "aws_iam_role_policy" "codebuild_policy" {
         ],
         Resource = "${aws_s3_bucket.codebuild_artifacts.arn}/*"
       },
-      # CodePipeline Trigger Permissions
       {
         Effect = "Allow",
         Action = [
@@ -62,7 +55,6 @@ resource "aws_iam_role_policy" "codebuild_policy" {
         ],
         Resource = aws_codepipeline.martini_pipeline.arn
       },
-      # CodeStar Connection Permissions
       {
         Effect = "Allow",
         Action = [
@@ -76,21 +68,18 @@ resource "aws_iam_role_policy" "codebuild_policy" {
   })
 }
 
-# CodePipeline Service Role and Policy
 resource "aws_iam_role" "codepipeline_role" {
-  name = "${var.environment}-${var.pipeline_name}-codepipeline-role"
+  name = "${local.name_prefix}-codepipeline-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
-    Statement = [
-      {
-        Effect = "Allow",
-        Principal = {
-          Service = "codepipeline.amazonaws.com"
-        },
-        Action = "sts:AssumeRole"
-      }
-    ]
+    Statement = [{
+      Effect = "Allow",
+      Principal = {
+        Service = "codepipeline.amazonaws.com"
+      },
+      Action = "sts:AssumeRole"
+    }]
   })
 
   tags = var.tags
@@ -103,7 +92,6 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
-      # Permissions to start and manage CodeBuild
       {
         Effect = "Allow",
         Action = [
@@ -112,7 +100,6 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
         ],
         Resource = aws_codebuild_project.martini_project.arn
       },
-      # Permissions to interact with S3 for artifacts
       {
         Effect = "Allow",
         Action = [
@@ -121,7 +108,6 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
         ],
         Resource = "${aws_s3_bucket.codebuild_artifacts.arn}/*"
       },
-      # CodePipeline Permissions
       {
         Effect = "Allow",
         Action = [
@@ -134,7 +120,6 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
         ],
         Resource = aws_codepipeline.martini_pipeline.arn
       },
-      # CodeStar Connection Permissions
       {
         Effect = "Allow",
         Action = [
@@ -148,24 +133,21 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
   })
 }
 
-# KMS Permissions for CodePipeline
 resource "aws_iam_role_policy" "codepipeline_kms_policy" {
   name = "CodePipelineKMSPolicy"
   role = aws_iam_role.codepipeline_role.id
 
   policy = jsonencode({
     Version = "2012-10-17",
-    Statement = [
-      {
-        Effect = "Allow",
-        Action = [
-          "kms:Decrypt",
-          "kms:Encrypt",
-          "kms:GenerateDataKey",
-          "kms:DescribeKey"
-        ],
-        Resource = "arn:aws:kms:${var.aws_region}:${data.aws_caller_identity.current.account_id}:alias/aws/s3"
-      }
-    ]
+    Statement = [{
+      Effect = "Allow",
+      Action = [
+        "kms:Decrypt",
+        "kms:Encrypt",
+        "kms:GenerateDataKey",
+        "kms:DescribeKey"
+      ],
+      Resource = "arn:aws:kms:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:alias/aws/s3"
+    }]
   })
 }
