@@ -40,23 +40,9 @@ variable "buildspec_file" {
 }
 
 variable "martini_version" {
-  description = "Version of Martini to be used in the build"
+  description = "Version of Martini to be used in the build. If not provided, it defaults to LATEST."
   type        = string
-}
-
-variable "aws_region" {
-  description = "AWS region for deployment"
-  type        = string
-}
-
-variable "aws_account_id" {
-  description = "AWS Account ID"
-  type        = string
-}
-
-variable "ecr_repo_name" {
-  description = "ECR repository name for Martini builds"
-  type        = string
+  default     = "latest"
 }
 
 variable "parameter_name" {

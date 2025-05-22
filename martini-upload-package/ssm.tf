@@ -1,5 +1,5 @@
 resource "aws_ssm_parameter" "martini_upload_package" {
-  name  = var.parameter_name  # fallback is set in variables.tf
+  name  = var.parameter_name
   type  = "SecureString"
 
   value = jsonencode({
@@ -13,7 +13,7 @@ resource "aws_ssm_parameter" "martini_upload_package" {
     SUCCESS_CHECK_PACKAGE_NAME = var.success_check_package_name
   })
 
-  description = "SSM parameter for Martini upload-package configurations"
+  description = "SSM parameter for Martini upload-package configuration"
 
   tags = merge(
     {

@@ -1,5 +1,5 @@
 resource "aws_codebuild_project" "martini_project" {
-  name        = "${var.environment}-${var.pipeline_name}-codebuild"
+  name        = "${local.name_prefix}-codebuild"
   description = "CodeBuild project for Martini"
 
   environment {
@@ -8,6 +8,11 @@ resource "aws_codebuild_project" "martini_project" {
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
     privileged_mode             = false
+
+    environment_variable {
+      name  = "ECR_REPO_URI"
+      value = aws_ecr_repository.martini_repository.repository_url
+    }
   }
 
   source {

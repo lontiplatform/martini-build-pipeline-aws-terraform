@@ -1,3 +1,4 @@
+
 # Martini Package Upload with AWS CodePipeline
 
 This Terraform module configures an AWS CodePipeline for uploading Martini packages to a specified Martini instance. The pipeline ensures controlled and automated deployments by integrating package management and secure configuration handling into a streamlined CI/CD workflow.
@@ -49,18 +50,11 @@ terraform apply
 - **Monitoring & Debugging**: CloudWatch logs are available for both build and pipeline stages. Use them to troubleshoot issues. Log retention is configurable via `log_retention_days`.
 - **Automation**: Pipelines are automatically triggered by commits to the specified Git branch.
 
-## References
-- [Martini CI/CD Documentation](https://developer.lonti.com/docs/martini/cicd/automated-deployment/aws-codepipeline)
-- [Terraform SSM Parameter Store Docs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssm_parameter)
-- [AWS CodePipeline Docs](https://docs.aws.amazon.com/codepipeline)
-- [Martini Build Pipeline Repository](https://github.com/lontiplatform/martini-build-pipeline-aws)
-
 ## Inputs Reference
 
 | Name                         | Description                                                               | Type         | Default                  | Required |
 |------------------------------|---------------------------------------------------------------------------|--------------|--------------------------|:--------:|
-| async_upload                 | Set to true to treat HTTP 504 as successful upload                        | bool         | "false"                  | no       |
-| aws_region                   | AWS region for deployment                                                 | string       | n/a                      | yes      |
+| async_upload                 | Set to true to treat HTTP 504 as successful upload                        | bool         | false                    | no       |
 | base_url                     | The URL of the remote Martini runtime server                              | string       | n/a                      | yes      |
 | branch_name                  | Branch name for CodePipeline                                              | string       | n/a                      | yes      |
 | buildspec_file               | Buildspec file for CodeBuild (e.g., 'martini-upload-package.yaml')        | string       | n/a                      | yes      |

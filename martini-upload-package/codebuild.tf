@@ -1,5 +1,5 @@
 resource "aws_codebuild_project" "martini_project" {
-  name        = "${var.environment}-${var.pipeline_name}-codebuild"
+  name        = "${local.name_prefix}-codebuild"
   description = "CodeBuild project for Martini"
 
   environment {
@@ -31,6 +31,5 @@ resource "aws_codebuild_project" "martini_project" {
   }
 
   service_role = aws_iam_role.codebuild_role.arn
-
-  tags = var.tags
+  tags         = var.tags
 }
