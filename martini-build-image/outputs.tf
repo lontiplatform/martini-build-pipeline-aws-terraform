@@ -32,3 +32,8 @@ output "ecr_repository_arn" {
   value       = aws_ecr_repository.martini_repository.arn
   description = "The ARN of the ECR repository for Martini"
 }
+
+output "ecr_repository_url" {
+  value       = aws_ecr_repository.martini_repository.repository_url
+  description = "Full ECR URI for Docker image operations"
+}
